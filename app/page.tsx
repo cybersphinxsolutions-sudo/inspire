@@ -37,12 +37,12 @@ export default function Home() {
       
 
     {/* Premium Animated Background */}
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#0C1F3F]">
         <div className="bg-slide"></div>
         <div className="bg-slide"></div>
         <div className="bg-slide"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-slate-50/30 z-10"></div>
-        <div className="absolute inset-0 bg-slate-50/20 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0C1F3F] via-[#0C1F3F]/85 to-[#0C1F3F]/20 z-10"></div>
+        <div className="absolute inset-0 bg-[#0C1F3F]/30 z-10"></div>
     </div>
 
     {/* Navigation */}
@@ -380,131 +380,131 @@ export default function Home() {
             <div className="w-16 h-1 bg-[#00C6D7] mx-auto rounded-full mb-12"></div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 text-left">
 
-                <div  className="group flex items-center gap-4 bg-gray-50 border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#006795] rounded-xl flex items-center justify-center text-white">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-bold text-gray-900 text-sm">Carbon Monoxide Alarms</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Carbon Monoxide Alarms</p>
                 </div>
-                <div  className="group flex items-center gap-4 bg-gray-50 border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md transition-all cursor-pointer">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#006795] rounded-xl flex items-center justify-center text-white">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-bold text-gray-900 text-sm">Clothes Dryer Exhaust Ventilation</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Clothes Dryer Exhaust Ventilation</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Doors – Entry</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Doors – Entry</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Doors – Fire-Labeled</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Doors – Fire-Labeled</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Doors – General</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Doors – General</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Egress</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Egress</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Electrical – Conductors, Outlets, and Switches</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Electrical – Conductors, Outlets, and Switches</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Electrical GFCI or AFCI</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Electrical GFCI or AFCI</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Fire Extinguishers</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Fire Extinguishers</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Guardrails</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Guardrails</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Handrails</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Handrails</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">HVAC</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">HVAC</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Infestation</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Infestation</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Lighting Auxiliary</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Lighting Auxiliary</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Lighting Exterior</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Lighting Exterior</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Lighting Interior</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Lighting Interior</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Mold-Like Substances</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Mold-Like Substances</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Sinks</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Sinks</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Smoke Alarms</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Smoke Alarms</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Sprinkler Assembly</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Sprinkler Assembly</p>
                 </div>
-                <div className="video-item group flex items-center gap-4 px-5 py-4 cursor-pointer">
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#00C6D7] to-[#006795] rounded-xl flex items-center justify-center text-white text-sm shadow-lg shadow-cyan-900/30">
+                <div className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#EF4444] to-[#DC2626] rounded-xl flex items-center justify-center text-white text-sm shadow-md shadow-red-500/20">
                         ▶
                     </div>
-                    <p className="font-semibold text-white/85 text-sm group-hover:text-[#00C6D7] transition-colors">Structural Systems</p>
+                    <p className="font-bold text-gray-900 text-sm group-hover:text-[#EF4444] transition-colors">Structural Systems</p>
                 </div>
             </div>
         </div>
