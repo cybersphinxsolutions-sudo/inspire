@@ -511,7 +511,7 @@ export default function InspectionCategoryPage() {
         }
     };
 
-    const syncPendingChanges = async () => {
+    const syncPendingChanges = async (showToastOnError = true) => {
         try {
             const syncKey = `pending_sync_${id}`;
             const existingSyncStr = localStorage.getItem(syncKey);
@@ -530,7 +530,9 @@ export default function InspectionCategoryPage() {
             await refreshCompletedUnits();
         } catch (error) {
             console.error("Error syncing offline changes:", error);
-            toast.error("Failed to sync some offline changes. Will retry later.");
+            if (showToastOnError) {
+                toast.error("Failed to sync some offline changes. Will retry later.");
+            }
         }
     };
 
@@ -539,7 +541,7 @@ export default function InspectionCategoryPage() {
         const handleOnline = () => {
             setIsOnline(true);
             toast.success("Connection restored! Syncing offline changes...");
-            syncPendingChanges();
+            syncPendingChanges(true);
         };
         const handleOffline = () => {
             setIsOnline(false);
@@ -555,7 +557,7 @@ export default function InspectionCategoryPage() {
                 const existingSync = JSON.parse(existingSyncStr);
                 setOfflineChangesCount(existingSync.length);
                 if (navigator.onLine && existingSync.length > 0) {
-                    syncPendingChanges();
+                    syncPendingChanges(false);
                 }
             }
         } catch (e) {}
@@ -893,6 +895,7 @@ export default function InspectionCategoryPage() {
         const file = e.target.files?.[0];
         if (!file) return;
         setIsUploadingGeneralImage(true);
+        const toastId = toast.loading("Uploading general image...", { autoClose: false });
         try {
             const formData = new FormData();
             formData.append('image', file);
@@ -904,12 +907,19 @@ export default function InspectionCategoryPage() {
             const data = await response.json();
             if (data.success) {
                 setGeneralImage(data.data.url);
-                toast.success('Image uploaded!', { position: 'top-right' });
+                toast.update(toastId, { render: 'Image uploaded!', type: 'success', isLoading: false, autoClose: 3000 });
             } else {
                 throw new Error(data.message || 'Upload failed');
             }
-        } catch {
-            toast.error('Image upload failed. Please try again.', { position: 'top-right' });
+        } catch (error) {
+            console.warn("Upload API failed, falling back to local Base64 image reader:", error);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64Url = reader.result as string;
+                setGeneralImage(base64Url);
+                toast.update(toastId, { render: 'Image loaded locally (offline fallback)!', type: 'success', isLoading: false, autoClose: 3000 });
+            };
+            reader.readAsDataURL(file);
         } finally {
             setIsUploadingGeneralImage(false);
             if (generalFileInputRef.current) generalFileInputRef.current.value = '';
@@ -1180,8 +1190,17 @@ export default function InspectionCategoryPage() {
                 throw new Error(data.message || "Upload failed");
             }
         } catch (error) {
-            console.error(error);
-            toast.update(toastId, { render: "Upload failed. Please try again.", type: "error", isLoading: false, autoClose: 3000 });
+            console.warn("Upload API failed, falling back to local Base64 image reader:", error);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64Url = reader.result as string;
+                setPhotos([...photos, base64Url]);
+                toast.update(toastId, { render: "Image loaded locally (offline fallback)!", type: "success", isLoading: false, autoClose: 3000 });
+                // Simulate analysis effect
+                setIsAnalyzing(true);
+                setTimeout(() => setIsAnalyzing(false), 2000);
+            };
+            reader.readAsDataURL(file);
         } finally {
             if (fileInputRef.current) fileInputRef.current.value = '';
         }
@@ -1960,10 +1979,10 @@ export default function InspectionCategoryPage() {
                 <div className="fixed inset-0 bg-black/80 z-[1000] flex items-start justify-center p-4 sm:p-6 md:p-10 overflow-hidden isolate">
                     <div className="absolute inset-0 -z-10" onClick={handleODModalClose} />
 
-                    <Card className="w-full max-w-xl bg-white rounded-3xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.4)] animate-in slide-in-from-top-4 duration-300 flex flex-col h-auto max-h-[70vh] self-center">
+                    <Card className="font-lexend w-full max-w-xl bg-white rounded-3xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.35)] animate-in slide-in-from-top-4 duration-300 flex flex-col h-auto max-h-[70vh] self-center border border-slate-100">
                         <div className="p-5 border-b shrink-0 flex items-center justify-between bg-white/90 backdrop-blur-md sticky top-0 z-20">
-                            <h3 className="text-base font-black text-gray-900 uppercase tracking-tight truncate pr-4">{currentModalItem}</h3>
-                            <button onClick={handleODModalClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 shrink-0">
+                            <h3 className="text-base font-extrabold text-slate-800 uppercase tracking-tight truncate pr-4 font-lexend">{currentModalItem}</h3>
+                            <button onClick={handleODModalClose} className="p-2 hover:bg-slate-150 rounded-full transition-colors text-slate-450 shrink-0">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
@@ -1971,11 +1990,11 @@ export default function InspectionCategoryPage() {
                         <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6 custom-scrollbar overscroll-contain">
                             {modalStep === 1 && (
                                 <div className="py-20 flex flex-col items-center justify-center text-center">
-                                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-                                        <Plus className="w-8 h-8 text-gray-300" />
+                                    <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                                        <Plus className="w-8 h-8 text-slate-300" />
                                     </div>
-                                    <p className="text-sm font-bold text-gray-400 mb-8 max-w-xs">{`No existing deficiency record for this item.`}</p>
-                                    <Button onClick={() => setModalStep(2)} className="bg-[#006795] hover:bg-blue-700 text-white font-black px-12 h-14 rounded-2xl shadow-lg uppercase tracking-widest text-xs">Add New</Button>
+                                    <p className="text-sm font-semibold text-slate-400 mb-8 max-w-xs">{`No existing deficiency record for this item.`}</p>
+                                    <Button onClick={() => setModalStep(2)} className="bg-[#006795] hover:bg-[#0a5670] text-white font-extrabold px-12 h-14 rounded-2xl shadow-lg uppercase tracking-widest text-xs font-lexend">Add New</Button>
                                 </div>
                             )}
 
@@ -1983,15 +2002,15 @@ export default function InspectionCategoryPage() {
                                 <div className="space-y-6 animate-in fade-in duration-300 pb-6">
                                     {/* 1. DEFICIENCY SELECTED - Full width dropdown */}
                                     <div>
-                                        <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Deficiency Selected</label>
-                                        <div onClick={() => handleOpenSelection('selected')} className={`w-full bg-gray-50 border rounded-2xl p-4 text-xs font-bold cursor-pointer hover:bg-white hover:border-blue-400 transition-all flex justify-between items-center group ${selectedDeficiency ? 'border-[#0E7490] border-2 bg-white' : 'border-gray-100'}`}>
-                                            <span className={selectedDeficiency ? "text-gray-900" : "text-gray-400"}>
+                                        <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Deficiency Selected</label>
+                                        <div onClick={() => handleOpenSelection('selected')} className={`w-full bg-slate-50 border rounded-2xl p-4 text-xs font-semibold cursor-pointer hover:bg-white hover:border-[#0E7490] transition-all flex justify-between items-center group font-lexend ${selectedDeficiency ? 'border-[#0E7490] border-2 bg-white text-slate-800' : 'border-slate-150 text-slate-400'}`}>
+                                            <span>
                                                 {selectedDeficiency ? selectedDeficiency.selected : "--Select--"}
                                             </span>
-                                            <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-[#0E7490]" />
+                                            <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-[#0E7490]" />
                                         </div>
                                         {selectedDeficiency && (
-                                            <button onClick={() => setSelectedDeficiency(null)} className="flex items-center gap-1 mt-2 text-xs font-medium text-red-500 hover:text-red-600">
+                                            <button onClick={() => setSelectedDeficiency(null)} className="flex items-center gap-1 mt-2 text-xs font-semibold text-rose-500 hover:text-rose-600 font-lexend">
                                                 <X className="w-3 h-3" /> Clear Selection
                                             </button>
                                         )}
@@ -1999,18 +2018,18 @@ export default function InspectionCategoryPage() {
 
                                     {/* 2. DEFICIENCY DETAIL - Clickable Dropdown */}
                                     <div>
-                                        <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Deficiency Detail</label>
-                                        <div onClick={() => selectedDeficiency && handleOpenSelection('detail')} className={`w-full bg-gray-50 border rounded-2xl p-4 text-xs font-bold ${selectedDeficiency ? 'cursor-pointer hover:bg-white hover:border-blue-400' : 'cursor-not-allowed opacity-70'} transition-all flex justify-between items-center group ${selectedDeficiency ? 'border-[#0E7490] border-2 bg-white' : 'border-gray-100'}`}>
-                                            <span className={selectedDeficiency ? "text-gray-900" : "text-gray-400"}>
+                                        <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Deficiency Detail</label>
+                                        <div onClick={() => selectedDeficiency && handleOpenSelection('detail')} className={`w-full bg-slate-50 border rounded-2xl p-4 text-xs font-semibold ${selectedDeficiency ? 'cursor-pointer hover:bg-white hover:border-[#0E7490]' : 'cursor-not-allowed opacity-70'} transition-all flex justify-between items-center group font-lexend ${selectedDeficiency ? 'border-[#0E7490] border-2 bg-white text-slate-800' : 'border-slate-150 text-slate-400'}`}>
+                                            <span>
                                                 {selectedDeficiency ? selectedDeficiency.detail : "-- Select deficiency first --"}
                                             </span>
-                                            {selectedDeficiency && <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-[#0E7490]" />}
+                                            {selectedDeficiency && <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-[#0E7490]" />}
                                         </div>
                                       </div>
 
                                     {/* 4. PIC - Photo section with Take Photo and Choose from Gallery */}
                                     <div>
-                                        <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Pic</label>
+                                        <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Pic</label>
 
                                         {/* Image Grid */}
                                         {photos.length > 0 && (
@@ -2061,9 +2080,9 @@ export default function InspectionCategoryPage() {
 
                                     {/* 5. NOTE - Text area */}
                                     <div>
-                                        <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Note</label>
+                                        <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Note</label>
                                         <textarea
-                                            className="w-full border border-gray-100 bg-gray-50 rounded-2xl p-4 text-xs font-bold text-gray-900 focus:bg-white focus:border-[#0E7490] outline-none transition-all h-24 resize-none"
+                                            className="w-full border border-slate-100 bg-slate-50/50 rounded-2xl p-4 text-xs font-semibold text-slate-800 focus:bg-white focus:border-[#0E7490] outline-none transition-all h-24 resize-none font-lexend"
                                             value={odForm.note}
                                             onChange={(e) => setOdForm({ ...odForm, note: e.target.value })}
                                             placeholder="Write your observation..."
@@ -2073,9 +2092,9 @@ export default function InspectionCategoryPage() {
                                     {/* 6. LOCATION + HEALTH & SAFETY - Side by side */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Location</label>
+                                            <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Location</label>
                                             <select
-                                                className="w-full border border-gray-100 bg-gray-50 rounded-2xl p-4 text-xs font-black text-gray-800 outline-none focus:bg-white focus:border-[#0E7490] transition-all cursor-pointer"
+                                                className="w-full border border-slate-100 bg-slate-50/50 rounded-2xl p-4 text-xs font-semibold text-slate-700 outline-none focus:bg-white focus:border-[#0E7490] transition-all cursor-pointer font-lexend"
                                                 value={odForm.location}
                                                 onChange={(e) => setOdForm({ ...odForm, location: e.target.value })}
                                             >
@@ -2093,12 +2112,12 @@ export default function InspectionCategoryPage() {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Health & Safety</label>
-                                            <div className={`w-full rounded-2xl p-4 text-xs font-black flex items-center min-h-[50px] ${odForm.healthAndSafety === 'Life-Threatening' ? 'bg-red-500 text-white border-red-500' :
-                                                odForm.healthAndSafety === 'Severe' ? 'bg-orange-500 text-white border-orange-500' :
-                                                    odForm.healthAndSafety === 'Moderate' ? 'bg-yellow-500 text-white border-yellow-500' :
-                                                        odForm.healthAndSafety === 'Low' ? 'bg-green-500 text-white border-green-500' :
-                                                            'bg-gray-50 text-gray-900 border-gray-100'
+                                            <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Health & Safety</label>
+                                            <div className={`w-full rounded-2xl p-4 text-xs font-semibold flex items-center min-h-[50px] font-lexend ${odForm.healthAndSafety === 'Life-Threatening' ? 'bg-rose-500 text-white border-rose-500 font-bold' :
+                                                odForm.healthAndSafety === 'Severe' ? 'bg-orange-500 text-white border-orange-500 font-bold' :
+                                                    odForm.healthAndSafety === 'Moderate' ? 'bg-amber-500 text-white border-amber-500 font-bold' :
+                                                        odForm.healthAndSafety === 'Low' ? 'bg-emerald-500 text-white border-emerald-500 font-bold' :
+                                                            'bg-slate-50/50 text-slate-700 border-slate-150'
                                                 } border`}>
                                                 {odForm.healthAndSafety || "Low"}
                                             </div>
@@ -2107,19 +2126,19 @@ export default function InspectionCategoryPage() {
 
                                     {/* 7. INSPECTION SCORING - Auto-calculated card */}
                                     <div>
-                                        <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Inspection Scoring</label>
-                                        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+                                        <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Inspection Scoring</label>
+                                        <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm font-lexend">
                                             {/* Row 1: All Sample and Pts Lost (Raw) */}
                                             <div className="grid grid-cols-2 gap-4 mb-3">
                                                 <div>
                                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1">All Sample</p>
-                                                    <div className="bg-gray-50 rounded-xl px-3 py-2 text-sm font-bold text-gray-800">
+                                                    <div className="bg-slate-50/50 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 border border-slate-100">
                                                         {scoringResult?.allSample || totalSamples}
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1">Pts Lost (Raw)</p>
-                                                    <div className="bg-gray-50 rounded-xl px-3 py-2 text-sm font-bold text-gray-800">
+                                                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Pts Lost (Raw)</p>
+                                                    <div className="bg-slate-50/50 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 border border-slate-100">
                                                         {scoringResult?.ptsLostRaw?.toFixed(2) || '0.00'}
                                                     </div>
                                                 </div>
@@ -2128,14 +2147,14 @@ export default function InspectionCategoryPage() {
                                             {/* Row 2: Pts Lost and Possible Score */}
                                             <div className="grid grid-cols-2 gap-4 mb-3">
                                                 <div>
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1">Pts Lost</p>
-                                                    <div className="bg-gray-50 rounded-xl px-3 py-2 text-sm font-bold text-gray-800">
+                                                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Pts Lost</p>
+                                                    <div className="bg-slate-50/50 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 border border-slate-100">
                                                         {scoringResult?.ptsLost?.toFixed(2) || '0.00'}
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1">Possible Score</p>
-                                                    <div className="bg-gray-50 rounded-xl px-3 py-2 text-sm font-bold text-gray-800">
+                                                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Possible Score</p>
+                                                    <div className="bg-slate-50/50 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 border border-slate-100">
                                                         {currentSection === 'outside' ? OUTSIDE_POSSIBLE_SCORE : INSIDE_POSSIBLE_SCORE}
                                                     </div>
                                                 </div>
@@ -2144,14 +2163,14 @@ export default function InspectionCategoryPage() {
                                             {/* Row 3: Max Pts Lost and Score */}
                                             <div className="grid grid-cols-2 gap-4 mb-3">
                                                 <div>
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1">Max Pts Lost</p>
-                                                    <div className="bg-gray-50 rounded-xl px-3 py-2 text-sm font-bold text-gray-800">
+                                                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Max Pts Lost</p>
+                                                    <div className="bg-slate-50/50 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 border border-slate-100">
                                                         {scoringResult?.maxPtsLost?.toFixed(2) || (currentSection === 'outside' ? '0.01' : '5.50')}
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1">Score</p>
-                                                    <div className="bg-cyan-50 border border-cyan-200 rounded-xl px-3 py-2 text-sm font-black text-[#0E7490]">
+                                                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Score</p>
+                                                    <div className="bg-cyan-50/30 border border-cyan-150 rounded-xl px-3 py-2 text-sm font-extrabold text-[#0E7490]">
                                                         {scoringResult?.score?.toFixed(2) || (currentSection === 'outside' ? OUTSIDE_POSSIBLE_SCORE.toFixed(2) : INSIDE_POSSIBLE_SCORE.toFixed(2))}
                                                     </div>
                                                 </div>
@@ -2159,16 +2178,16 @@ export default function InspectionCategoryPage() {
 
                                             {/* Row 4: # of Deficiencies */}
                                             <div>
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1"># of Deficiencies</p>
-                                                <div className="bg-gray-50 rounded-xl px-3 py-2 text-sm font-bold text-gray-800">
+                                                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1"># of Deficiencies</p>
+                                                <div className="bg-slate-50/50 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 border border-slate-100">
                                                     {scoringResult?.deficiencies || deficiencyCount}
                                                 </div>
                                             </div>
 
                                             {/* Show override indicator for Outside inspections */}
                                             {currentSection === 'outside' && outsideScoringResult?.isDeficiencyOverride && (
-                                                <div className="mt-2 pt-2 border-t border-gray-100">
-                                                    <p className="text-[10px] font-bold text-[#0E7490] uppercase tracking-wide">
+                                                <div className="mt-2 pt-2 border-t border-slate-100">
+                                                    <p className="text-[10px] font-semibold text-[#0E7490] uppercase tracking-wide">
                                                         * Severity determined by deficiency description override
                                                     </p>
                                                 </div>
@@ -2179,21 +2198,21 @@ export default function InspectionCategoryPage() {
                                     {/* STANDARD & INSPECTION PROTOCOL - visible when scrolled to bottom */}
                                     <div className="space-y-3 pt-2 pb-2">
                                         <div>
-                                            <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Standard ✅</label>
+                                            <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Standard ✅</label>
                                             <button
                                                 type="button"
                                                 onClick={() => setIsStandardModalOpen(true)}
-                                                className="w-full bg-[#006795] hover:bg-[#005580] text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest transition-colors shadow-md"
+                                                className="w-full bg-[#006795] hover:bg-[#005580] text-white font-extrabold py-4 rounded-2xl uppercase text-xs tracking-widest transition-colors shadow-md font-lexend"
                                             >
                                                 Standard
                                             </button>
                                         </div>
                                         <div>
-                                            <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">Inspection Protocol (International)</label>
+                                            <label className="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-wider font-lexend">Inspection Protocol (International)</label>
                                             <button
                                                 type="button"
                                                 onClick={() => setIsInspectionProtocolModalOpen(true)}
-                                                className="w-full bg-green-600 hover:bg-green-700 text-white font-black py-4 rounded-2xl uppercase text-xs tracking-widest transition-colors shadow-md"
+                                                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 rounded-2xl uppercase text-xs tracking-widest transition-colors shadow-md font-lexend"
                                             >
                                                 Inspection Protocol (International)
                                             </button>
