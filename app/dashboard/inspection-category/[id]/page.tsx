@@ -823,6 +823,51 @@ export default function InspectionCategoryPage() {
             });
         }
     };
+    const handleSubmitSection = async (section: 'outside' | 'inside' | 'unit') => {
+        try {
+            const type = section === 'outside' ? 'Outside' : section === 'inside' ? 'Inside' : activeInspectionUnit;
+            if (!type) {
+                toast.error("Please select a unit to submit.");
+                return;
+            }
+            const statuses = section === 'outside' ? outsideStatuses : section === 'inside' ? insideStatuses : unitStatuses;
+            const itemsList = section === 'outside' ? outsideItemsList : section === 'inside' ? insideItemsList : unitItemsList;
+
+            // Warn if not all items are inspected, but allow submission
+            const uninspected = itemsList.filter(item => !statuses[item]);
+            if (uninspected.length > 0) {
+                const confirmSubmit = window.confirm(`There are ${uninspected.length} items left uninspected. Do you still want to submit?`);
+                if (!confirmSubmit) return;
+            }
+
+            const toastId = toast.loading("Submitting progress...");
+
+            // Prepare payload
+            const payload = {
+                property_id: property?._id || params.id,
+                unit_id: section === 'unit' ? activeInspectionUnit : urlBuilding,
+                building_id: urlBuilding,
+                inspection_type: type,
+                responses: statuses,
+                inspectionData: {
+                    findings: propertyFindings,
+                    isComplete: true,
+                    odFormSnapshots: savedODFormData
+                }
+            };
+
+            await inspectionsAPI.saveProgress(payload);
+            
+            // Save locally
+            updateLocalCache(type, statuses, true);
+
+            toast.update(toastId, { render: `${type} submitted successfully!`, type: "success", isLoading: false, autoClose: 3000 });
+            await refreshCompletedUnits();
+        } catch (error) {
+            console.error("Error submitting section:", error);
+            toast.error("Failed to submit progress. Progress saved locally.");
+        }
+    };
 
     const selectAll = (section: 'outside' | 'inside' | 'unit', status: ItemStatus) => {
         const list = section === 'outside' ? outsideItemsList : section === 'inside' ? insideItemsList : unitItemsList;
@@ -1279,28 +1324,13 @@ export default function InspectionCategoryPage() {
                         </div>
                         Select All No OD
                     </Button>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2 font-lexend">
                         <Button 
-                            onClick={() => selectAll(section, 'OD')} 
-                            className={`w-full text-[10px] h-10 font-bold flex items-center justify-center gap-2 uppercase rounded-lg shadow-sm border transition-all ${
-                                (() => {
-                                    const toggleableItems = items.filter(i => !savedODItems.has(`${section}:${i}`));
-                                    return toggleableItems.length > 0 && toggleableItems.every(item => statuses[item] === 'OD');
-                                })() ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-white hover:bg-red-50 text-[#DC2626] border-[#DC2626]'
-                            }`}
+                            onClick={() => handleSubmitSection(section)} 
+                            className="w-full text-[10px] h-10 font-extrabold flex items-center justify-center gap-1.5 uppercase rounded-lg shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white transition-all border-0"
                         >
-                            <div className={`w-4 h-4 border flex items-center justify-center rounded ${
-                                (() => {
-                                    const toggleableItems = items.filter(i => !savedODItems.has(`${section}:${i}`));
-                                    return toggleableItems.length > 0 && toggleableItems.every(item => statuses[item] === 'OD');
-                                })() ? 'bg-white/20 border-white/40' : 'bg-white border-[#DC2626]'
-                            }`}>
-                                {(() => {
-                                    const toggleableItems = items.filter(i => !savedODItems.has(`${section}:${i}`));
-                                    return toggleableItems.length > 0 && toggleableItems.every(item => statuses[item] === 'OD') ? <Check className="w-3 h-3 text-white" strokeWidth={4} /> : null;
-                                })()}
-                            </div>
-                            Observe Deficiency
+                            <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                            {section === 'outside' ? 'Submit Outside' : section === 'inside' ? 'Submit Inside' : 'Submit Unit'}
                         </Button>
                         <Button 
                             onClick={() => selectAll(section, 'N/A')} 
@@ -1391,15 +1421,9 @@ export default function InspectionCategoryPage() {
                                 </Button>
                             </th>
                             <th className="py-2 px-2">
-                                <Button onClick={() => selectAll(section, 'OD')} className="w-full bg-white hover:bg-red-50 text-[#DC2626] border border-[#DC2626] text-[10px] h-8 font-bold flex items-center gap-1.5 px-3 uppercase">
-                                    <div className="w-3 h-3 bg-white border border-[#DC2626] flex items-center justify-center">
-                                        {(() => {
-                                            const toggleableItems = items.filter(i => !savedODItems.has(`${section}:${i}`));
-                                            const isChecked = toggleableItems.length > 0 && toggleableItems.every(item => statuses[item] === 'OD');
-                                            return isChecked ? <Check className="w-2.5 h-2.5 text-[#DC2626]" strokeWidth={4} /> : null;
-                                        })()}
-                                    </div>
-                                    Observe Deficiency
+                                <Button onClick={() => handleSubmitSection(section)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] h-8 font-extrabold flex items-center justify-center gap-1.5 px-3 uppercase border-0 font-lexend rounded-lg shadow-sm shadow-emerald-600/10">
+                                    <Check className="w-4 h-4 text-white" strokeWidth={3} />
+                                    {section === 'outside' ? 'Submit Outside' : section === 'inside' ? 'Submit Inside' : 'Submit Unit'}
                                 </Button>
                             </th>
                             <th className="py-2 px-2">

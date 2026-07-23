@@ -914,7 +914,7 @@ export function BuildingDivisionModal({ isOpen, onClose, onUpdate, propertyData 
         {/* Buildings Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
           {buildings.map((building, index) => (
-            <div key={index} className="border border-slate-200/80 rounded-2xl p-4 bg-slate-50/20 shadow-sm hover:border-slate-300 transition-all">
+            <div key={index} className="border border-slate-200/85 rounded-2xl p-4 bg-slate-50/30 shadow-sm hover:border-slate-300 transition-all">
               <div className="flex items-end gap-3">
                 <div className="flex-1">
                   <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Building Name</label>
@@ -922,7 +922,7 @@ export function BuildingDivisionModal({ isOpen, onClose, onUpdate, propertyData 
                     type="text"
                     value={building.name}
                     onChange={(e) => updateBuildingName(index, e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-sm font-medium text-slate-800 transition-all"
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 hover:bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006795]/20 focus:border-[#006795] text-sm font-medium text-slate-800 transition-all"
                   />
                 </div>
                 <div className="flex-1">
@@ -932,14 +932,14 @@ export function BuildingDivisionModal({ isOpen, onClose, onUpdate, propertyData 
                     value={building.units}
                     onChange={(e) => updateBuildingUnits(index, parseInt(e.target.value) || 0)}
                     min={0}
-                    className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 text-sm font-medium text-slate-800 transition-all"
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 hover:bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#006795]/20 focus:border-[#006795] text-sm font-medium text-slate-800 transition-all"
                   />
                 </div>
                 <button
                   onClick={() => {
                     toast.success(`Building ${building.name} updated`, { position: "top-right" })
                   }}
-                  className="px-4 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-xl transition-colors shadow-sm shadow-teal-600/10 border-0 whitespace-nowrap h-[42px] flex items-center justify-center"
+                  className="px-4 py-2.5 bg-[#006795] hover:bg-[#005580] text-white text-xs font-bold rounded-xl transition-colors shadow-sm shadow-[#006795]/10 border-0 whitespace-nowrap h-[42px] flex items-center justify-center font-lexend"
                 >
                   Update
                 </button>
@@ -952,7 +952,7 @@ export function BuildingDivisionModal({ isOpen, onClose, onUpdate, propertyData 
         <Button
           onClick={handleUpdate}
           disabled={isLoading}
-          className="w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl text-sm transition-colors border-0 shadow-md shadow-teal-600/10"
+          className="w-full py-3.5 bg-[#006795] hover:bg-[#005580] text-white font-bold rounded-xl text-sm transition-colors border-0 shadow-md shadow-[#006795]/10 font-lexend"
         >
           {isLoading ? (
             <div className="flex items-center justify-center gap-2">

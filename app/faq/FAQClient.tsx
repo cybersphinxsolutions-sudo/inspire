@@ -136,7 +136,7 @@ export default function FAQClient() {
                   className="group flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-6 py-5 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-left w-full"
                 >
                   {/* Play icon */}
-                  <div className="flex-shrink-0 w-12 h-12 bg-[#006795] rounded-xl flex items-center justify-center group-hover:bg-[#F84B5F] transition-colors duration-300 shadow-lg">
+                  <div className="flex-shrink-0 w-12 h-12 bg-[#EF4444] rounded-xl flex items-center justify-center group-hover:bg-[#DC2626] transition-colors duration-300 shadow-lg shadow-red-100">
                     <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
                     </svg>

@@ -37,12 +37,12 @@ export default function Home() {
       
 
     {/* Premium Animated Background */}
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#0C1F3F]">
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
         <div className="bg-slide"></div>
         <div className="bg-slide"></div>
         <div className="bg-slide"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0C1F3F] via-[#0C1F3F]/85 to-[#0C1F3F]/20 z-10"></div>
-        <div className="absolute inset-0 bg-[#0C1F3F]/30 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-slate-50/30 z-10"></div>
+        <div className="absolute inset-0 bg-slate-50/20 z-10"></div>
     </div>
 
     {/* Navigation */}
