@@ -161,17 +161,38 @@ export default function Dashboard() {
         state: selectedState || undefined,
         city: selectedCity || undefined,
       })
-      if (response.success) {
+      if (response && response.success && response.properties) {
         setProperties(response.properties)
+        localStorage.setItem('cached_properties', JSON.stringify(response.properties))
         // Fetch progress for these properties
         if (response.properties.length > 0) {
           fetchProgress(response.properties)
         }
         setSelectedIds(new Set()) // clear selection on refresh
+      } else {
+        const cached = localStorage.getItem('cached_properties')
+        if (cached) {
+          try {
+            const parsed = JSON.parse(cached)
+            setProperties(parsed)
+            fetchProgress(parsed)
+          } catch (e) {}
+        }
       }
     } catch (error: any) {
       console.error('Error fetching properties:', error)
-      setProperties([])
+      const cached = localStorage.getItem('cached_properties')
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached)
+          setProperties(parsed)
+          fetchProgress(parsed)
+        } catch (e) {
+          setProperties([])
+        }
+      } else {
+        setProperties([])
+      }
     } finally {
       setLoading(false)
     }

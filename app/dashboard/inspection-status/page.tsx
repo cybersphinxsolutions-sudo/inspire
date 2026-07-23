@@ -66,37 +66,61 @@ export default function InspectionStatusPage() {
       }
       const token = localStorage.getItem('token')
       
-      const [userRes, propertiesRes, inspectionsRes] = await Promise.all([
-        authAPI.getMe(),
-        propertiesAPI.getAll(),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/inspections`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-      ])
+      let userRes: any = { success: false, user: null };
+      let propertiesRes: any = { success: false, properties: [] as Property[] };
+      let completedInspections: Inspection[] = [];
+
+      try {
+        const [uR, pR, iR] = await Promise.all([
+          authAPI.getMe().catch(() => ({ success: false, user: null })),
+          propertiesAPI.getAll().catch(() => ({ success: false, properties: [] })),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/inspections`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }).then(res => res.json()).catch(() => ({ success: false, inspections: [] }))
+        ]);
+        userRes = uR;
+        propertiesRes = pR;
+        if (iR && iR.success) {
+          completedInspections = iR.inspections || [];
+        }
+      } catch (e) {
+        console.warn('API connection failed during promise, using cache fallbacks:', e);
+      }
 
       if (userRes.success) {
         setUser(userRes.user)
       }
 
       let allProperties: Property[] = []
-      if (propertiesRes.success) {
+      if (propertiesRes.success && propertiesRes.properties && propertiesRes.properties.length > 0) {
         allProperties = propertiesRes.properties
+        localStorage.setItem('cached_properties', JSON.stringify(propertiesRes.properties))
+      } else {
+        const cached = localStorage.getItem('cached_properties')
+        if (cached) {
+          try {
+            allProperties = JSON.parse(cached)
+          } catch (e) {}
+        }
       }
 
-      let completedInspections: Inspection[] = []
-      if (inspectionsRes.ok) {
-        const data = await inspectionsRes.json()
-        if (data.success) {
-          completedInspections = data.inspections;
+      if (completedInspections && completedInspections.length > 0) {
+        localStorage.setItem('cached_completed_inspections', JSON.stringify(completedInspections))
+      } else {
+        const cachedInspections = localStorage.getItem('cached_completed_inspections')
+        if (cachedInspections) {
+          try {
+            completedInspections = JSON.parse(cachedInspections)
+          } catch (e) {}
         }
       }
 
       // Map properties with their inspection status
       const propertiesWithStatus: PropertyWithInspection[] = allProperties.map(property => {
         const inspection = completedInspections.find(
-          insp => insp.property._id === property._id || insp.property._id.toString() === property._id.toString()
+          insp => insp.property?._id === property._id || insp.property?._id?.toString() === property._id?.toString()
         )
         
         return {
@@ -115,7 +139,17 @@ export default function InspectionStatusPage() {
       setProperties(propertiesWithStatus)
     } catch (error: any) {
       console.error('Error fetching data:', error)
-      toast.error("Failed to load properties")
+      const cached = localStorage.getItem('cached_properties')
+      if (cached) {
+        try {
+          const allProperties = JSON.parse(cached)
+          const propertiesWithStatus: PropertyWithInspection[] = allProperties.map((property: any) => ({
+            ...property,
+            hasInspection: false
+          }))
+          setProperties(propertiesWithStatus)
+        } catch (e) {}
+      }
     } finally {
       setLoading(false)
       setRefreshing(false)
