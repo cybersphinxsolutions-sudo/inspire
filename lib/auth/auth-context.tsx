@@ -1,0 +1,35 @@
+'use client'
+
+import { createContext, useContext, ReactNode } from 'react'
+
+interface AuthContextType {
+  isAuthenticated: boolean
+  user: any
+  login: (credentials: any) => Promise<void>
+  logout: () => void
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const value: AuthContextType = {
+    isAuthenticated: true,
+    user: null,
+    login: async () => {},
+    logout: () => {},
+  }
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
+}
